@@ -2,10 +2,10 @@
 // Records are stored "normalised" (ids instead of nested objects), like database rows.
 // mocks/db.js turns them into the exact JSON shapes from docs/API_CONTRACT.md.
 //
-// Demo logins (all mock users share the password "password123"):
-//   aryan@example.com   – STUDENT, leader of "Code Crusaders"
-//   deeksha@example.com – STUDENT, member of "Neural Ninjas"
-//   admin@hackmate.dev  – ADMIN
+// Demo logins (same credentials the backend DataSeeder uses):
+//   aryan@example.com   / password123 – STUDENT, leader of "Code Crusaders"
+//   deeksha@example.com / password123 – STUDENT, member of "Neural Ninjas"
+//   admin@hackmate.com  / admin123    – ADMIN
 
 export const DEMO_PASSWORD = 'password123';
 
@@ -28,7 +28,7 @@ export const seedUsers = [
     availability: 'FULL_TIME', skillIds: skillIds('Java', 'Spring Boot', 'PostgreSQL', 'Git'),
   },
   {
-    id: 2, name: 'Admin', email: 'admin@hackmate.dev', password: DEMO_PASSWORD,
+    id: 2, name: 'Admin', email: 'admin@hackmate.com', password: 'admin123',
     bio: 'Platform administrator.', role: 'ADMIN', experienceLevel: 'ADVANCED',
     preferredRoles: [], availability: 'FULL_TIME', skillIds: [],
   },

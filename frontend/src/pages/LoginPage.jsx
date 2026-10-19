@@ -7,6 +7,12 @@ import { useAuth } from '../context/AuthContext';
 import { errorMessage } from '../api/errorHandler';
 import { USE_MOCK } from '../config';
 
+const DEMO_ACCOUNTS = [
+  { email: 'aryan@example.com', password: 'password123' },
+  { email: 'deeksha@example.com', password: 'password123' },
+  { email: 'admin@hackmate.com', password: 'admin123' },
+];
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LoginPage() {
@@ -72,10 +78,10 @@ export default function LoginPage() {
 
       {USE_MOCK && (
         <div className="mt-6 rounded-lg border border-dashed border-indigo-200 bg-indigo-50/60 p-3 text-xs text-slate-600">
-          <p className="mb-1 font-semibold text-indigo-700">Mock mode demo accounts (password: password123)</p>
-          {['aryan@example.com', 'deeksha@example.com', 'admin@hackmate.dev'].map((email) => (
+          <p className="mb-1 font-semibold text-indigo-700">Mock mode demo accounts (click to fill)</p>
+          {DEMO_ACCOUNTS.map(({ email, password }) => (
             <button key={email} type="button" className="mr-3 text-indigo-600 hover:underline"
-              onClick={() => setForm({ email, password: 'password123' })}>
+              onClick={() => setForm({ email, password })}>
               {email}
             </button>
           ))}

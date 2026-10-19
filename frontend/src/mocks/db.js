@@ -5,7 +5,7 @@ import {
   seedSkills, seedUsers, seedHackathons, seedTeams, seedRequests, seedNotifications,
 } from './seed';
 
-const STORAGE_KEY = 'hackmate_mock_db_v1';
+const STORAGE_KEY = 'hackmate_mock_db_v2';
 
 function freshDb() {
   // structuredClone so mutations never touch the seed arrays

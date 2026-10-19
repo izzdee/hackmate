@@ -242,8 +242,6 @@ export function deleteTeam(id) {
   const me = currentUser();
   const team = getTeamOr404(id);
   if (team.leaderId !== me.id) throw new ApiError(403, 'Only the team leader can delete the team');
-  team.memberIds.filter((uid) => uid !== me.id)
-    .forEach((uid) => notify(uid, `${me.name} deleted the team ${team.name}`));
   db.requests = db.requests.filter((r) => r.teamId !== team.id);
   db.teams = db.teams.filter((t) => t.id !== team.id);
   saveDb();
@@ -256,7 +254,6 @@ export function leaveTeam(id) {
   if (!team.memberIds.includes(me.id)) throw new ApiError(400, 'You are not a member of this team');
   if (team.leaderId === me.id) throw new ApiError(400, 'The leader cannot leave the team. Delete the team instead.');
   team.memberIds = team.memberIds.filter((uid) => uid !== me.id);
-  notify(team.leaderId, `${me.name} left ${team.name}`);
   saveDb();
   return null; // 204
 }
@@ -354,6 +351,11 @@ export function acceptRequest(id) {
   assertCanAddToTeam(team, req.userId);
   req.status = 'ACCEPTED';
   team.memberIds.push(req.userId);
+  // The user is now in a team for this hackathon → their other pending requests for it are void
+  db.requests
+    .filter((r) => r.id !== req.id && r.userId === req.userId && r.status === 'PENDING'
+      && findTeam(r.teamId)?.hackathonId === team.hackathonId)
+    .forEach((r) => { r.status = 'REJECTED'; });
   if (req.type === 'INVITE') {
     notify(team.leaderId, `${me.name} accepted your invite to join ${team.name}`);
   } else {
