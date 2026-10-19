@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import HackathonsPage from './pages/HackathonsPage';
 import HackathonDetailPage from './pages/HackathonDetailPage';
+import TeamPage from './pages/TeamPage';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/hackathons" element={<HackathonsPage />} />
             <Route path="/hackathons/:id" element={<HackathonDetailPage />} />
+            <Route path="/teams/:id" element={<TeamPage />} />
             <Route element={<AdminRoute />}>
               {/* admin pages added in step 11 */}
             </Route>
