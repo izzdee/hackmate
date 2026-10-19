@@ -13,6 +13,7 @@ import HackathonDetailPage from './pages/HackathonDetailPage';
 import TeamPage from './pages/TeamPage';
 import SearchPage from './pages/SearchPage';
 import PublicProfilePage from './pages/PublicProfilePage';
+import RequestsPage from './pages/RequestsPage';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/teams/:id" element={<TeamPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/users/:id" element={<PublicProfilePage />} />
+            <Route path="/requests" element={<RequestsPage />} />
             <Route element={<AdminRoute />}>
               {/* admin pages added in step 11 */}
             </Route>
