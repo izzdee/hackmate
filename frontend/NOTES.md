@@ -1,8 +1,8 @@
 # HackMate Frontend — Notes
 
 ## What was built
-A complete React (Vite) frontend for HackMate. It runs fully in **mock mode** (no backend
-needed), and switches to the real Spring Boot API with one flag.
+A complete React (Vite) frontend for HackMate. By default it talks to the real Spring Boot
+API on port 8080. It can also run fully in **mock mode** (no backend needed) with one flag.
 
 | Route | Page | Highlights |
 |---|---|---|
@@ -24,20 +24,23 @@ a dropdown with "Mark read" / "Mark all as read", and a user menu with logout.
 ```bash
 cd frontend
 npm install
-npm run dev            # http://localhost:5173, mock mode
+npm run dev            # http://localhost:5173, uses the real backend at http://localhost:8080/api
 ```
-Demo accounts in mock mode (also clickable on the login page):
-- `aryan@example.com` / `password123`: student, leader of "Code Crusaders"
-- `deeksha@example.com` / `password123`: student, member of "Neural Ninjas"
+Start the backend first (see `backend/NOTES.md`). Seeded accounts:
+- `aryan@hackmate.com` / `password123`: student, leader of "Code Crusaders"
+- any other seeded student, e.g. `priya@hackmate.com` / `password123`
 - `admin@hackmate.com` / `admin123`: admin
 
-Mock data lives in your browser's localStorage. Use **"Reset demo data"** in the footer to restore the seed.
-
-**Against the real backend** (no code changes needed):
-```bash
-VITE_USE_MOCK=false npm run dev
-```
+The dev server must run on port 5173, because that is the only origin the backend's CORS allows.
 Optional: `VITE_API_BASE_URL` overrides `http://localhost:8080/api`.
+
+**Mock mode** (no backend; no code changes needed):
+```bash
+VITE_USE_MOCK=true npm run dev     # PowerShell: $env:VITE_USE_MOCK="true"; npm run dev
+```
+Mock demo accounts (also clickable on the login page): `aryan@example.com`, `deeksha@example.com`
+(password `password123`) and `admin@hackmate.com` / `admin123`. Mock data lives in your browser's
+localStorage. Use **"Reset demo data"** in the footer to restore the seed.
 
 ## Folder structure (`src/`)
 ```
@@ -54,13 +57,19 @@ pages/      one file per page
 utils/      constants.js (enum labels), format.js (dates)
 ```
 
-## Integration status (build step 12)
-- **No backend exists yet.** `backend/` contains only its CLAUDE.md and nothing listens on port 8080,
-  so end-to-end testing against the real API could not be done.
-- What was verified: with `VITE_USE_MOCK=false` the app calls `POST http://localhost:8080/api/auth/login`
-  (and the other contract URLs), and shows "Cannot reach the server. Is the backend running?".
-- When the backend is ready: run `VITE_USE_MOCK=false npm run dev`, log in with the seeded
-  accounts and click through each page. Errors show as toasts carrying the backend's `message`.
+## Integration status
+`USE_MOCK` now defaults to `false`. All pages were tested end to end against the real backend
+in a headless browser, as a student and as the admin. Every API call returned 2xx and there
+were no console errors. The tests covered:
+- loading every route
+- profile save, Find Matches, invite → accept → leave
+- join request → reject, the notification bell and "Mark read"
+- create and delete a team, admin create/edit/delete hackathon, and register
+
+No contract mismatches were found, so no UI changes were needed. The one remaining difference
+is that the hackathon form validates more strictly than the backend (deadline ≤ start date,
+team size ≤ 10). The backend accepts deadline ≤ end date and size ≤ 20, so stricter
+client-side checks are harmless.
 
 ## Deviations / assumptions / contract notes for the backend teammate
 None of these change the contract. They are places where the contract is silent:
