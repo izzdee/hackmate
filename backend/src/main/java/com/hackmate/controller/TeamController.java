@@ -1,7 +1,10 @@
 package com.hackmate.controller;
 
+import com.hackmate.dto.MatchResultDto;
 import com.hackmate.dto.SaveTeamRequest;
+import com.hackmate.dto.SkillDto;
 import com.hackmate.dto.TeamDto;
+import com.hackmate.service.MatchingService;
 import com.hackmate.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -14,9 +17,11 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
+    private final MatchingService matchingService;
 
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, MatchingService matchingService) {
         this.teamService = teamService;
+        this.matchingService = matchingService;
     }
 
     @PostMapping
@@ -55,5 +60,15 @@ public class TeamController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void leave(@PathVariable Long id) {
         teamService.leave(id);
+    }
+
+    @GetMapping("/{id}/skill-gap")
+    public List<SkillDto> getSkillGap(@PathVariable Long id) {
+        return matchingService.getSkillGap(id);
+    }
+
+    @GetMapping("/{id}/matches")
+    public List<MatchResultDto> getMatches(@PathVariable Long id) {
+        return matchingService.getMatches(id);
     }
 }
