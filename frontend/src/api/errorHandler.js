@@ -21,6 +21,8 @@ export function handleApiError(error) {
     if (window.location.pathname !== '/login') window.location.assign('/login');
     return;
   }
+  // Background calls (e.g. notification polling) pass { silent: true } to skip toasts
+  if (error?.config?.silent) return;
   // id = message, so the same error shown twice at once collapses into one toast
   toast.error(message, { id: message });
 }

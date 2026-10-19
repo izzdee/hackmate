@@ -8,8 +8,11 @@ export const getNotifications = () =>
   USE_MOCK ? mockCall(mock.getNotifications) : api.get('/notifications').then((r) => r.data);
 
 // GET /notifications/unread-count → { count }
+// Polled in the background, so errors don't toast (silent)
 export const getUnreadCount = () =>
-  USE_MOCK ? mockCall(mock.getUnreadCount) : api.get('/notifications/unread-count').then((r) => r.data);
+  USE_MOCK
+    ? mockCall(mock.getUnreadCount, { silent: true })
+    : api.get('/notifications/unread-count', { silent: true }).then((r) => r.data);
 
 // PUT /notifications/{id}/read → Notification
 export const markAsRead = (id) =>

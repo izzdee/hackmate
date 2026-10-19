@@ -5,6 +5,7 @@ import { ChevronDown, LogOut, Menu, Shield, User, Users, X } from 'lucide-react'
 import { useAuth } from '../context/AuthContext';
 import useClickOutside from '../hooks/useClickOutside';
 import Avatar from './Avatar';
+import NotificationBell from './NotificationBell';
 
 const LINKS = [
   { to: '/', label: 'Dashboard', end: true },
@@ -50,7 +51,7 @@ export default function Navbar() {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          {/* NotificationBell is added in step 10 */}
+          <NotificationBell />
           <div className="relative" ref={menuRef}>
             <button className="flex items-center gap-2 rounded-lg p-1 pr-2 hover:bg-slate-100" onClick={() => setMenuOpen((o) => !o)} aria-haspopup="menu" aria-expanded={menuOpen}>
               <Avatar user={user} size="sm" />
