@@ -20,6 +20,17 @@ and join requests, notifications, and rule-based teammate matching with skill-ga
    - Recommended: `JWT_SECRET`, a Base64 key of at least 256 bits (`openssl rand -base64 32`).
      If it's unset, a random key is generated at startup, so logins stop working after a restart.
 3. From `backend/`: `./mvnw spring-boot:run` (Windows: `mvnw.cmd spring-boot:run`)
+
+   **Docker database on Windows next to a local PostgreSQL:** two servers both bound to
+   port 5432 will clash: the app reaches the local one and fails with
+   "password authentication failed". Run the Docker database on 5433 instead:
+   ```
+   docker run -d --name hackmate-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=hackmate -p 5433:5432 postgres:16
+   ```
+   Then, in PowerShell:
+   ```
+   $env:DB_URL="jdbc:postgresql://localhost:5433/hackmate"; $env:DB_USERNAME="postgres"; $env:DB_PASSWORD="postgres"; .\mvnw.cmd spring-boot:run
+   ```
 4. API: `http://localhost:8080/api`. Run the tests with `./mvnw test`.
 
 **Seeded logins:** `admin@hackmate.com` / `admin123`, and students `aryan@`, `deeksha@`,
