@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Date;
  * Creates and checks JSON Web Tokens.
  * The token's "subject" is the user's email; it is signed with HMAC-SHA256 using jwt.secret.
  */
+@Slf4j
 @Service
 public class JwtService {
 
@@ -23,7 +25,13 @@ public class JwtService {
 
     public JwtService(@Value("${jwt.secret}") String secret,
                       @Value("${jwt.expiration-ms}") long expirationMs) {
-        this.signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        if (secret == null || secret.isBlank()) {
+            // No secret configured: use a random key so no secret ever lives in the repository.
+            log.warn("JWT_SECRET is not set - using a random key; tokens will be invalid after a restart");
+            this.signingKey = Jwts.SIG.HS256.key().build();
+        } else {
+            this.signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        }
         this.expirationMs = expirationMs;
     }
 

@@ -16,7 +16,9 @@ and join requests, notifications, and rule-based teammate matching with skill-ga
 1. Start PostgreSQL and create the database: `CREATE DATABASE hackmate;`
 2. Set DB credentials if they differ from the defaults (`postgres` / `postgres`):
    - PowerShell: `$env:DB_USERNAME="postgres"; $env:DB_PASSWORD="yourpassword"`
-   - Optional: `DB_URL` (default `jdbc:postgresql://localhost:5432/hackmate`), `JWT_SECRET` (Base64)
+   - Optional: `DB_URL` (default `jdbc:postgresql://localhost:5432/hackmate`)
+   - Recommended: `JWT_SECRET`, a Base64 key of at least 256 bits (`openssl rand -base64 32`).
+     If it's unset, a random key is generated at startup, so logins stop working after a restart.
 3. From `backend/`: `./mvnw spring-boot:run` (Windows: `mvnw.cmd spring-boot:run`)
 4. API: `http://localhost:8080/api`. Run the tests with `./mvnw test`.
 
